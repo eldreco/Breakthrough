@@ -1,6 +1,5 @@
 ##############################
 ####---------APAGAR--------###
-from types import NoneType
 from jogos import *
 
 
@@ -93,7 +92,7 @@ class JogoBT_27(Game):
         return "W" if state[0] == 1 else "B"
     
     def display(self, state):
-        print("------------------")
+        print("-----------------")
         counter = 8
         result = ""
         for i in range(counter,0, -1):
@@ -102,16 +101,17 @@ class JogoBT_27(Game):
             result+="|"
             for c in (chr(i) for i in range(97, 97+counter)):   
                 piece = self.board.get(c+str(i))
-                if type(piece) == NoneType:
+                if type(piece) != str:
                     result+=". "
                 else:
                     result+=self.board.get(c+str(i))
                     result+=" "
             
             print(result)
-        print("------------------")
-        print("|a b c d e f g h")
-        print("--NEXT PLAYER:", self.to_move(state))
+        print("-+---------------")
+        print(" |a b c d e f g h")
+        if not self.terminal_test(state):
+            print("--NEXT PLAYER:", self.to_move(state))
 
        
             
