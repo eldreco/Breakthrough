@@ -35,7 +35,6 @@ class JogoBT_27(Game):
         return "W" if state[0] == 1 else "B"
     
     def display(self, state):
-<<<<<<< HEAD
         print("------------------")
         counter = 8
         result = ""
@@ -57,21 +56,6 @@ class JogoBT_27(Game):
         print("--NEXT PLAYER: ", self.to_move(state))
 
        
-=======
-        result = "------------------\n"
-        empty = False
-        for x in range (8, 0, -1):
-            result += str(x)
-            result += "|"
-            for pos in state.board:
-                if str(x) in pos:
-                    result += state.board.get(pos)
-                    result += " "
-            result += "\n"
-        result += "-+----------------\n |a b c d e f g h\n--NEXT PLAYER: "
-        result += self.to_move(state)
-        print(result)
->>>>>>> 19724311a31ce0a3e5c65ab6a8f7e43662044d35
             
 bt = JogoBT_27()
 bt.display(bt.initial)
