@@ -2,11 +2,12 @@
 ####---------APAGAR--------###
 from types import NoneType
 from jogos import *
+
+
 class JogoBT_27(Game):
-    
     to_move = 1
     utility = 0 #????
-
+    size = 8
     board = {"a1" : 'W', "b1" : 'W', "c1" : 'W', "d1" : 'W', "e1" : 'W', "f1" : 'W', "g1" : 'W', "h1" : 'W',
                 "a2" : 'W', "b2" : 'W', "c2" : 'W', "d2" : 'W', "e2" : 'W', "f2" : 'W', "g2" : 'W', "h2" : 'W',
                 "a7" : 'B', "b7" : 'B', "c7" : 'B', "d7" : 'B', "e7" : 'B', "f7" : 'B', "g7" : 'B', "h7" : 'B',
@@ -16,16 +17,26 @@ class JogoBT_27(Game):
                 'f2-g3', 'g2-f3', 'g2-g3', 'g2-h3', 'h2-g3','h2-h3']
     initial = GameState(to_move, utility, board, moves)
 
-    def _init(self, size = 8, initial = initial):
+
+    def _init(self, size = 8):
         self.size = size
         self.to_move = initial[0]
-        self.initial = initial
+        self.initial = GameState(to_move, utility, board, moves)
 
     def actions(self, state):
         return
     
     def result(self, state, move):
-        return
+        next_to_move = 1 if state.to_move == 0 else 0
+        next_board = dict()
+        move = move.split("-")
+        pos_from = move[0]
+        pos_to = move[1]
+        state.board[pos_to] = state.board.get(pos_from)   
+        del state.board[pos_from] 
+  
+        result = GameState(next_to_move, state.utility, state.board, state.moves)
+        return result
     
     def utility(self, state, player):
         """Return the value of this final state to player."""
@@ -58,9 +69,12 @@ class JogoBT_27(Game):
             print(result)
         print("------------------")
         print("|a b c d e f g h")
-        print("--NEXT PLAYER: ", self.to_move(state))
+        print("--NEXT PLAYER:", self.to_move(state))
 
        
             
 bt = JogoBT_27()
 bt.display(bt.initial)
+second = bt.result(bt.initial, "a2-a3")
+bt.display(second)
+
