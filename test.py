@@ -30,7 +30,7 @@ class JogoBT_27(Game):
 
     def to_move(self, state):
         """Return the player whose move it is in this state."""
-        return state.to_move
+        return "W" if state[0] == 1 else "B"
     
     def display(self, state):
         result = "------------------\n"
@@ -43,6 +43,8 @@ class JogoBT_27(Game):
                     result += state.board.get(pos)
                     result += " "
             result += "\n"
+        result += "-+----------------\n |a b c d e f g h\n--NEXT PLAYER: "
+        result += self.to_move(state)
         print(result)
             
 bt = JogoBT_27()
