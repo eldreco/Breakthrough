@@ -33,7 +33,13 @@ class JogoBT_27(Game):
 
     def terminal_test(self, state):
         """Return True if this is a final state for the game."""
-        return not self.actions(state)
+        for x in state.board:
+            if "8" in x and state.board.get(x) == "W":
+                return True
+            elif "1" in x and state.board.get(x) == "B":
+                return True
+        return False
+        
 
     def to_move(self, state):
         """Return the player whose move it is in this state."""
@@ -64,3 +70,4 @@ class JogoBT_27(Game):
             
 bt = JogoBT_27()
 bt.display(bt.initial)
+print(bt.terminal_test(bt.initial))
