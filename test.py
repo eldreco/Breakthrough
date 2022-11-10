@@ -29,7 +29,9 @@ class JogoBT_27(Game):
     
     def utility(self, state, player):
         """Return the value of this final state to player."""
-        return 
+        if self.terminal_test(state) == True:
+            return -1 if player == self.to_move(state) else 1
+        return 0 
 
     def terminal_test(self, state):
         """Return True if this is a final state for the game."""
@@ -70,4 +72,4 @@ class JogoBT_27(Game):
             
 bt = JogoBT_27()
 bt.display(bt.initial)
-print(bt.terminal_test(bt.initial))
+print("GAME OVER: ",bt.terminal_test(bt.initial))
