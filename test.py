@@ -40,11 +40,19 @@ class JogoBT_27(Game):
     
     def utility(self, state, player):
         """Return the value of this final state to player."""
-        return 
+        if self.terminal_test(state) == True:
+            return -1 if player == self.to_move(state) else 1
+        return 0 
 
     def terminal_test(self, state):
         """Return True if this is a final state for the game."""
-        return not self.actions(state)
+        for x in state.board:
+            if "8" in x and state.board.get(x) == "W":
+                return True
+            elif "1" in x and state.board.get(x) == "B":
+                return True
+        return False
+        
 
     def to_move(self, state):
         """Return the player whose move it is in this state."""
