@@ -7,7 +7,7 @@ class JogoBT_27(Game):
     to_move = 1
     utility = 0 #????
     size = 8
-    board = {"a1" : 'W', "b1" : 'W', "c1" : 'W', "d1" : 'W', "e1" : 'W', "f1" : 'W', "g1" : 'W', "h1" : 'W',
+    board = {"a1" : 'W',"a3" : 'B', "b1" : 'W', "c1" : 'W', "d1" : 'W', "e1" : 'W', "f1" : 'W', "g1" : 'W', "h1" : 'W',
                 "a2" : 'W', "b2" : 'W', "c2" : 'W', "d2" : 'W', "e2" : 'W', "f2" : 'W', "g2" : 'W', "h2" : 'W',
                 "a7" : 'B', "b7" : 'B', "c7" : 'B', "d7" : 'B', "e7" : 'B', "f7" : 'B', "g7" : 'B', "h7" : 'B',
                 "a8" : 'B', "b8" : 'B', "c8" : 'B', "d8" : 'B', "e8" : 'B', "f8" : 'B', "g8" : 'B', "h8" : 'B',}
@@ -117,6 +117,5 @@ class JogoBT_27(Game):
             
 bt = JogoBT_27()
 bt.display(bt.initial)
-print("------")
-s1 = bt.initial
-print(bt.actions(s1))
+
+print(bt.actions(bt.initial))
