@@ -1,5 +1,7 @@
 from jogos import*
 
+EstadoBT_27 = namedtuple('State', 'to_move, utility, board, moves')
+
 class JogoBT_27(Game):
     to_move = 1
     utility = 0 #????
@@ -11,13 +13,13 @@ class JogoBT_27(Game):
     moves = ['a2-a3', 'a2-b3', 'b2-a3', 'b2-b3', 'b2-c3', 'c2-b3', 'c2-c3', 'c2-d3',
                 'd2-c3', 'd2-d3', 'd2-e3', 'e2-d3', 'e2-e3', 'e2-f3', 'f2-e3', 'f2-f3',
                 'f2-g3', 'g2-f3', 'g2-g3', 'g2-h3', 'h2-g3','h2-h3']
-    initial = GameState(to_move, utility, board, moves)
+    initial = EstadoBT_27(to_move, utility, board, moves)
 
 
     def _init(self, size = 8):
         self.size = size
         self.to_move = initial[0]
-        self.initial = GameState(to_move, utility, board, moves)
+        self.initial = EstadoBT_27(to_move, utility, board, moves)
 
     def actions(self, state):
         player = self.to_move(state)
@@ -64,7 +66,7 @@ class JogoBT_27(Game):
         state.board[pos_to] = state.board.get(pos_from)   
         del state.board[pos_from] 
   
-        result = GameState(next_to_move, state.utility, state.board, state.moves)
+        result = EstadoBT_27(next_to_move, state.utility, state.board, state.moves)
         return result
     
     def utility(self, state, player):
@@ -107,8 +109,8 @@ class JogoBT_27(Game):
         print("-+---------------")
         print(" |a b c d e f g h")
         if not self.terminal_test(state):
-            print("--NEXT PLAYER:", self.to_move(state))
-
+            print("--NEXT PLAYER:", self.to_move(state))    
+    
        
             
 bt = JogoBT_27()
