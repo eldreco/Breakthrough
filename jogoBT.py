@@ -1,7 +1,4 @@
-##############################
-####---------APAGAR--------###
-from jogos import *
-
+from jogos import*
 
 class JogoBT_27(Game):
     to_move = 1
@@ -29,34 +26,33 @@ class JogoBT_27(Game):
         for pos in state.board.keys():
             if state.board.get(pos) == player:
                 #Position occupied by piece Player
-                    col = ord(pos[0])
-                    row = int(pos[1]) + 1
-                    col_limit = 97+8
+                col = ord(pos[0])
+                row = int(pos[1]) + 1
+                col_limit = 97+8
                     
-                    #Move forward
-                    if row <= 8:
-                        #Move fits inside board
-                        #Check if there is a player piece there
-                        new_pos = chr(col) + str(row)
-                        if new_pos not in state.board.keys():
-                            actions.append(pos + "-" + new_pos)
+                #Move forward
+                if row <= 8:
+                    #Move fits inside board
+                    #Check if there is a player piece there
+                    new_pos = chr(col) + str(row)
+                    if new_pos not in state.board.keys():
+                        actions.append(pos + "-" + new_pos)
 
-                    #Move right
-                    if row <= 8 and col + 1 < col_limit:
-                        #Move fits inside board
-                        #Check if there is a player piece there
-                        new_pos = chr(col+1) + str(row)
-                        if new_pos not in state.board.keys():
-                            actions.append(pos + "-" + new_pos)
+                #Move right
+                if row <= 8 and col + 1 < col_limit:
+                    #Move fits inside board
+                    #Check if there is a player piece there
+                    new_pos = chr(col+1) + str(row)
+                    if new_pos not in state.board.keys():
+                        actions.append(pos + "-" + new_pos)
 
-                    #Move left
-                    if row <= 8 and col - 1 >= 97:
-                        #Move fits inside board
-                        #Check if there is a player piece there
-                        new_pos = chr(col-1) + str(row)
-                        if new_pos not in state.board.keys():
-                            actions.append(pos + "-" + new_pos)
-                    
+                #Move left
+                if row <= 8 and col - 1 >= 97:
+                    #Move fits inside board
+                    #Check if there is a player piece there
+                    new_pos = chr(col-1) + str(row)
+                    if new_pos not in state.board.keys():
+                        actions.append(pos + "-" + new_pos)
         return sorted(actions)
     
     def result(self, state, move):
