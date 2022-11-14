@@ -77,10 +77,20 @@ class JogoBT_27(Game):
 
     def terminal_test(self, state):
         """Return True if this is a final state for the game."""
+        black = []
+        white = []
         for x in state.board:
-            if "8" in x and state.board.get(x) == "W":
+            if state.board.get(x) == "B":
+                black.append(x)
+            else:
+                white.append(x)
+        if len(black) == 0 or len(white) == 0:
+            return True
+        for x in black:
+            if "1" in x:
                 return True
-            elif "1" in x and state.board.get(x) == "B":
+        for x in white:
+            if "8" in x:
                 return True
         return False
         
@@ -117,3 +127,5 @@ bt = JogoBT_27()
 bt.display(bt.initial)
 
 print(bt.actions(bt.initial))
+
+print(bt.terminal_test(bt.initial))
