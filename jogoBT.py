@@ -26,47 +26,85 @@ class JogoBT_27(Game):
         actions = list()
 
         for pos in state.board.keys():
-            if state.board.get(pos) == player:
-                #Position occupied by piece Player
-                col = ord(pos[0])
-                row = int(pos[1]) + 1
-                col_limit = 97+8
-                    
-                #Move forward
-                if row <= 8:
-                    #Move fits inside board
-                    #Check if there is a player piece there
-                    new_pos = chr(col) + str(row)
-                    if new_pos not in state.board.keys():
-                        actions.append(pos + "-" + new_pos)
+            
+            #print(pos,"------" ,state.board.get(pos), player)
 
-                #Move right
-                if row <= 8 and col + 1 < col_limit:
-                    #Move fits inside board
-                    #Check if there is a player piece there
-                    new_pos = chr(col+1) + str(row)
-                    if new_pos not in state.board.keys():
-                        actions.append(pos + "-" + new_pos)
+            if player == "W":
 
-                #Move left
-                if row <= 8 and col - 1 >= 97:
-                    #Move fits inside board
-                    #Check if there is a player piece there
-                    new_pos = chr(col-1) + str(row)
-                    if new_pos not in state.board.keys():
-                        actions.append(pos + "-" + new_pos)
+                if state.board.get(pos) == player:
+                    #Position occupied by piece Player
+                    col = ord(pos[0])
+                    row = int(pos[1]) + 1
+                    col_limit = 97+8
+                        
+                    #Move forward
+                    if row <= 8:
+                        #Move fits inside board
+                        #Check if there is a player piece there
+                        new_pos = chr(col) + str(row)
+                        if new_pos not in state.board.keys():
+                            actions.append(pos + "-" + new_pos)
+
+                    #Move right
+                    if row <= 8 and col + 1 < col_limit:
+                        #Move fits inside board
+                        #Check if there is a player piece there
+                        new_pos = chr(col+1) + str(row)
+                        if state.board.get(new_pos) != player:
+                            actions.append(pos + "-" + new_pos)
+
+                    #Move left
+                    if row <= 8 and col - 1 >= 97:
+                        #Move fits inside board
+                        #Check if there is a player piece there
+                        new_pos = chr(col-1) + str(row)
+                        if state.board.get(new_pos) != player:
+                            actions.append(pos + "-" + new_pos)
+
+            elif player == "B":
+
+                if state.board.get(pos) == player:
+                    #Position occupied by piece Player
+                    col = ord(pos[0])
+                    row = int(pos[1]) - 1
+                    col_limit = 97+8
+                        
+                    #Move forward
+                    if row > 0:
+                        #Move fits inside board
+                        #Check if there is a player piece there
+                        new_pos = chr(col) + str(row)
+                        if new_pos not in state.board.keys():
+                            actions.append(pos + "-" + new_pos)
+
+                    #Move right
+                    if row > 0 and col + 1 < col_limit:
+                        #Move fits inside board
+                        #Check if there is a player piece there
+                        new_pos = chr(col+1) + str(row)
+                        if state.board.get(new_pos) != player:
+                            actions.append(pos + "-" + new_pos)
+
+                    #Move left
+                    if row > 0  and col - 1 >= 97:
+                        #Move fits inside board
+                        #Check if there is a player piece there
+                        new_pos = chr(col-1) + str(row)
+                        if state.board.get(new_pos) != player:
+                            actions.append(pos + "-" + new_pos)
+
+
         return sorted(actions)
     
     def result(self, state, move):
         next_to_move = 1 if state.to_move == 0 else 0
-        next_board = dict()
         move = move.split("-")
         pos_from = move[0]
         pos_to = move[1]
-        state.board[pos_to] = state.board.get(pos_from)   
-        del state.board[pos_from] 
-  
-        result = EstadoBT_27(next_to_move, state.utility, state.board, state.moves)
+        new_board = state.board.copy()
+        new_board[pos_to] = new_board.get(pos_from)   
+        del new_board[pos_from]
+        result = EstadoBT_27(next_to_move, state.utility, new_board, state.moves)
         return result
     
     def utility(self, state, player):
@@ -98,11 +136,11 @@ class JogoBT_27(Game):
             result+=str(i)
             result+="|"
             for c in (chr(i) for i in range(97, 97+counter)):   
-                piece = self.board.get(c+str(i))
+                piece = state.board.get(c+str(i))
                 if type(piece) != str:
                     result+=". "
                 else:
-                    result+=self.board.get(c+str(i))
+                    result+=state.board.get(c+str(i))
                     result+=" "
             
             print(result)
@@ -111,9 +149,28 @@ class JogoBT_27(Game):
         if not self.terminal_test(state):
             print("--NEXT PLAYER:", self.to_move(state))    
     
-       
+    def executa(self, estado, listaJogadas):
+        "executa varias jogadas sobre um estado dado"
+        "devolve o estado final "
+        s = estado
+        for j in listaJogadas:
+            s = self.result(s, j)
+        return s   
             
-bt = JogoBT_27()
-bt.display(bt.initial)
+accoes = "a2-a3 a7-a6 c2-c3 a6-b5 b2-b3 b5-b4".split()
+jj = JogoBT_27()
+interessante=jj.executa(jj.initial, accoes)
 
-print(bt.actions(bt.initial))
+jj.display(interessante)
+
+print("-------------------------------------")
+
+novas_accoes = jj.actions(interessante)
+
+
+print(novas_accoes)
+outrointeressante=jj.result(interessante,novas_accoes[0])
+jj.display(interessante) 
+print("................................")
+jj.display(outrointeressante)
+print("Jogadas possíveis: ", novas_accoes)
