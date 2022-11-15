@@ -179,9 +179,9 @@ jj = JogoBT_27()
 
 listaJogadores = [Belarmino, Belarmino, Belarmino, Belarmino, minimax, minimax, Ronaldo,Messi]
 
-faz_campeonato(jj, listaJogadores, 10)
+#faz_campeonato(jj, listaJogadores, 10)
 
-#print(joga11(jj, Ronaldo, Belarmino))
+print(joga11(jj, Belarmino, Ronaldo))
 
 #jj.jogar(query_player, random_player)
 

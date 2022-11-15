@@ -107,7 +107,14 @@ def count_pieces(state, line, player):
 
 def func_aval_Belarmino(state,player):
     result = 0
-    for x in range(1,9):
-        result += pow(x,x) * count_pieces(state, x, player)
+
+    if player == 1:
+
+        for x in range(1,9):
+            result += pow(x,x) * count_pieces(state, x, player)
+    else:
+        for x in range(8, 0, -1):
+            result += pow(9-x,9-x) * count_pieces(state, x, player)
+    
     return result    
         
