@@ -1,5 +1,6 @@
 from jogos import*
 from jogar import *
+from jogadorBT import *
 
 EstadoBT_27 = namedtuple('State', 'to_move, utility, board, moves')
 
@@ -107,10 +108,8 @@ class JogoBT_27(Game):
     
     def utility(self, state, player):
         """Return the value of this final state to player."""
+        return -1 if self.to_move(state) == 1 else 1
 
-        current_player = "W" if self.to_move(state) == 1 else "B"
-
-        return 1 if current_player == player else -1
 
     def terminal_test(self, state):
         """Return True if this is a final state for the game."""
@@ -153,10 +152,16 @@ class JogoBT_27(Game):
         for j in listaJogadas:
             s = self.result(s, j)
         return s   
-            
-#jogatina
+
+player1 = jogadorBT_27("Ronaldo",2 , func_aval_27)
+player2 = jogadorBT_27("Messi", 1, func_aval_27)
+player1.display()
+print(" VS ")
+player2.display()
 
 jj = JogoBT_27()
 
-jj.jogar(query_player, random_player)
+print(joga11(jj, player2, player1))
+
+#jj.jogar(query_player, random_player)
 

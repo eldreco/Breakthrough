@@ -21,7 +21,7 @@ class JogadorAlfaBeta(Jogador):
         self.nome = nome
         self.fun = lambda game, state: alphabeta_cutoff_search_new(state,game,depth,eval_fn=fun_eval)
     def display(self):
-        print(nome+" ")
+        print(self.nome+" ")
 
 
 from jogos import *
@@ -34,12 +34,12 @@ def joga11(game, jog1, jog2):
     proxjog = jog1
     lista_jogadas=[]
     while not game.terminal_test(estado):
- #       estado.display()
         jogada = proxjog.fun(game, estado)
 #        p = game.to_move(estado)
         estado=game.result(estado,jogada)
         lista_jogadas.append(jogada)
         proxjog = jog2 if proxjog == jog1 else jog1
+        game.display(estado)
     #p jogou e ganhou
     return ((jog1.nome,jog2.nome),lista_jogadas, game.utility(estado,1))
 
