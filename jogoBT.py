@@ -96,7 +96,7 @@ class JogoBT_27(Game):
         return sorted(actions)
     
     def result(self, state, move):
-        next_to_move = 1 if state.to_move == 0 else 0
+        next_to_move = 2 if state.to_move == 1 else 1
         move = move.split("-")
         pos_from = move[0]
         pos_to = move[1]
@@ -113,14 +113,30 @@ class JogoBT_27(Game):
 
     def terminal_test(self, state):
         """Return True if this is a final state for the game."""
+
+        n_whites = 0
+        n_blacks = 0
+
         for pos in state.board.keys():
 
-            if pos[1] == str(8) and state.board.get(pos) == "W":
+            pos_piece = state.board.get(pos)
+
+            if pos_piece == "W":
+                n_whites+=1
+            else:
+                n_blacks+=1
+
+            if pos[1] == str(8) and pos_piece == "W":
                 return True
 
-            if pos[1] == str(1) and state.board.get(pos) == "B":
+            if pos[1] == str(1) and pos_piece == "B":
                 return True
+        
+
+        if n_whites == 0 or n_blacks == 0:
+            return True
             
+
         return False
     
     def display(self, state):
@@ -153,12 +169,13 @@ class JogoBT_27(Game):
             s = self.result(s, j)
         return s   
 
-Belarmino = jogadorBT_27("Belarmino",2 , func_aval_Belarmino)
+Belarmino = jogadorBT_27("Belarmino",2, func_aval_Belarmino)
 User = Jogador("user", query_player)
+Ronaldo = jogadorBT_27("Ronaldo", 2, func_aval_27)
 
 jj = JogoBT_27()
 
-print(joga11(jj, User, Belarmino))
+print(joga11(jj, Ronaldo, Belarmino))
 
-jj.jogar(query_player, random_player)
+#jj.jogar(query_player, random_player)
 
