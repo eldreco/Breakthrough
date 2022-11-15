@@ -9,8 +9,8 @@ def func_aval_flex(state, player):
     win_value = float('inf')
     attack_value = 10000000
     column_values = {'a' : 0, 'b':400, 'c' : 200, 'd' : 300, 'e' : 300, 'f' : 200, 'g' : 400 ,'h' : 0}
-    n_blacks = 0
-    n_whites = 0
+    n_blacks = []
+    n_whites = []
     n_tower_b = 0
     n_tower_g = 0
 
@@ -28,20 +28,18 @@ def func_aval_flex(state, player):
                 return win_value
         
         if pos_piece == "W":
-            n_whites+=1
-
+            n_whites.append(pos)
         else:
-            n_blacks+=1
+            n_blacks.append(pos)
 
         if pos_piece == player_piece:
             score += column_values.get(pos[0])
-        
-
-
     
     if player == 1:
-        dif = n_whites - n_blacks
-
+        dif = len(n_whites) - len(n_blacks)
+        score+= dif*attack_value
+    else:
+        dif = len(n_blacks) - len(n_whites)
         score+= dif*attack_value
 
     score+=func_aval_Belarmino(state, player)/1000
@@ -54,8 +52,8 @@ def func_aval_chorao(state, player):
     win_value = float('inf')
     attack_value = 10000
     column_values = {'a' : 0, 'b':400, 'c' : 200, 'd' : 300, 'e' : 300, 'f' : 200, 'g' : 400 ,'h' : 0}
-    n_blacks = 0
-    n_whites = 0
+    n_blacks = []
+    n_whites = []
     n_tower_b = 0
     n_tower_g = 0
 
@@ -73,20 +71,19 @@ def func_aval_chorao(state, player):
                 return win_value
         
         if pos_piece == "W":
-            n_whites+=1
+            n_whites.append(pos)
 
         else:
-            n_blacks+=1
+            n_blacks.append(pos)
 
         if pos_piece == player_piece:
             score += column_values.get(pos[0])
-        
-
-
     
     if player == 1:
-        dif = n_whites - n_blacks
-
+        dif = len(n_whites) - len(n_blacks)
+        return dif*attack_value
+    else:
+        dif = len(n_blacks) - len(n_whites)
         return dif*attack_value
 
     score+=func_aval_Belarmino(state, player)/1000
