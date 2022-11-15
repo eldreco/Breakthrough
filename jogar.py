@@ -43,7 +43,7 @@ def joga11(game, jog1, jog2):
     #p jogou e ganhou
     return ((jog1.nome,jog2.nome),lista_jogadas, game.utility(estado,1))
 
-#from func_timeout import func_timeout, FunctionTimedOut
+from func_timeout import func_timeout, FunctionTimedOut
 
 def joga11com_timeout(game,jog1, jog2, nsec):
     ### jog1 e jog2 são jogadores com funções que dado um estado do jogo devolvem a jogada que escolheram

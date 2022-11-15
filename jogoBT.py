@@ -170,12 +170,18 @@ class JogoBT_27(Game):
         return s   
 
 Belarmino = jogadorBT_27("Belarmino",2, func_aval_Belarmino)
-User = Jogador("user", query_player)
-Ronaldo = jogadorBT_27("Ronaldo", 2, func_aval_27)
+
+minimax = Jogador("minima", minimax_player)
+Ronaldo = jogadorBT_27("Ronaldo", 2, func_aval_flex)
+Messi = jogadorBT_27("Messi", 2, func_aval_chorao)
 
 jj = JogoBT_27()
 
-print(joga11(jj, Ronaldo, Belarmino))
+listaJogadores = [Belarmino, Belarmino, Belarmino, Belarmino, minimax, minimax, Ronaldo,Messi]
+
+faz_campeonato(jj, listaJogadores, 10)
+
+#print(joga11(jj, Ronaldo, Belarmino))
 
 #jj.jogar(query_player, random_player)
 
