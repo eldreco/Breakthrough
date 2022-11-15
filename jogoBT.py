@@ -1,11 +1,13 @@
 from jogos import*
+from jogar import *
 
 EstadoBT_27 = namedtuple('State', 'to_move, utility, board, moves')
 
 class JogoBT_27(Game):
-    to_move = 1
-    utility = 0 #????
-    size = 8
+    #to_move = 1
+    #utility = 0 #????
+    #size = 8
+
     board = {"a1" : 'W', "b1" : 'W', "c1" : 'W', "d1" : 'W', "e1" : 'W', "f1" : 'W', "g1" : 'W', "h1" : 'W',
                 "a2" : 'W', "b2" : 'W', "c2" : 'W', "d2" : 'W', "e2" : 'W', "f2" : 'W', "g2" : 'W', "h2" : 'W',
                 "a7" : 'B', "b7" : 'B', "c7" : 'B', "d7" : 'B', "e7" : 'B', "f7" : 'B', "g7" : 'B', "h7" : 'B',
@@ -13,22 +15,18 @@ class JogoBT_27(Game):
     moves = ['a2-a3', 'a2-b3', 'b2-a3', 'b2-b3', 'b2-c3', 'c2-b3', 'c2-c3', 'c2-d3',
                 'd2-c3', 'd2-d3', 'd2-e3', 'e2-d3', 'e2-e3', 'e2-f3', 'f2-e3', 'f2-f3',
                 'f2-g3', 'g2-f3', 'g2-g3', 'g2-h3', 'h2-g3','h2-h3']
-    initial = EstadoBT_27(to_move, utility, board, moves)
-
+    initial = EstadoBT_27(1, 0, board, moves)
 
     def _init(self, size = 8):
         self.size = size
-        self.to_move = initial[0]
-        self.initial = EstadoBT_27(to_move, utility, board, moves)
+        self.initial = initial
 
     def actions(self, state):
-        player = self.to_move(state)
+        player = "W" if self.to_move(state) == 1 else "B"
         actions = list()
 
         for pos in state.board.keys():
             
-            #print(pos,"------" ,state.board.get(pos), player)
-
             if player == "W":
 
                 if state.board.get(pos) == player:
@@ -109,33 +107,22 @@ class JogoBT_27(Game):
     
     def utility(self, state, player):
         """Return the value of this final state to player."""
-        if self.terminal_test(state) == True:
-            return -1 if player == self.to_move(state) else 1
-        return 0
+
+        current_player = "W" if self.to_move(state) == 1 else "B"
+
+        return 1 if current_player == player else -1
 
     def terminal_test(self, state):
         """Return True if this is a final state for the game."""
-        black = []
-        white = []
-        for x in state.board.keys():
-            if state.board.get(x) == "B":
-                black.append(x)
-            else:
-                white.append(x)
-        if len(black) == 0 or len(white) == 0:
-            return True
-        for b in black:
-            if "1" in b:
-                return True
-        for w in white:
-            if "8" in w:
-                return True
-        return False
-        
+        for pos in state.board.keys():
 
-    def to_move(self, state):
-        """Return the player whose move it is in this state."""
-        return "W" if state[0] == 1 else "B"
+            if pos[1] == str(8) and state.board.get(pos) == "W":
+                return True
+
+            if pos[1] == str(1) and state.board.get(pos) == "B":
+                return True
+            
+        return False
     
     def display(self, state):
         print("-----------------")
@@ -157,7 +144,7 @@ class JogoBT_27(Game):
         print("-+---------------")
         print(" |a b c d e f g h")
         if not self.terminal_test(state):
-            print("--NEXT PLAYER:", self.to_move(state))    
+            print("--NEXT PLAYER:", "W" if self.to_move(state) == 1 else "B")    
     
     def executa(self, estado, listaJogadas):
         "executa varias jogadas sobre um estado dado"
@@ -167,6 +154,9 @@ class JogoBT_27(Game):
             s = self.result(s, j)
         return s   
             
+#jogatina
 
 jj = JogoBT_27()
-jj.jogar(query_player,minimax_player)
+
+jj.jogar(query_player, random_player)
+
