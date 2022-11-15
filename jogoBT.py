@@ -153,15 +153,12 @@ class JogoBT_27(Game):
             s = self.result(s, j)
         return s   
 
-player1 = jogadorBT_27("Ronaldo",2 , func_aval_27)
-player2 = jogadorBT_27("Messi", 1, func_aval_27)
-player1.display()
-print(" VS ")
-player2.display()
+Belarmino = jogadorBT_27("Belarmino",2 , func_aval_Belarmino)
+User = Jogador("user", query_player)
 
 jj = JogoBT_27()
 
-print(joga11(jj, player2, player1))
+print(joga11(jj, User, Belarmino))
 
-#jj.jogar(query_player, random_player)
+jj.jogar(query_player, random_player)
 
