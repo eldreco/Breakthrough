@@ -111,24 +111,24 @@ class JogoBT_27(Game):
         """Return the value of this final state to player."""
         if self.terminal_test(state) == True:
             return -1 if player == self.to_move(state) else 1
-        return 0 
+        return 0
 
     def terminal_test(self, state):
         """Return True if this is a final state for the game."""
         black = []
         white = []
-        for x in state.board:
+        for x in state.board.keys():
             if state.board.get(x) == "B":
                 black.append(x)
             else:
                 white.append(x)
         if len(black) == 0 or len(white) == 0:
             return True
-        for x in black:
-            if "1" in x:
+        for b in black:
+            if "1" in b:
                 return True
-        for x in white:
-            if "8" in x:
+        for w in white:
+            if "8" in w:
                 return True
         return False
         
@@ -167,20 +167,6 @@ class JogoBT_27(Game):
             s = self.result(s, j)
         return s   
             
-accoes = "a2-a3 a7-a6 c2-c3 a6-b5 b2-b3 b5-b4".split()
+
 jj = JogoBT_27()
-interessante=jj.executa(jj.initial, accoes)
-
-jj.display(interessante)
-
-print("-------------------------------------")
-
-novas_accoes = jj.actions(interessante)
-
-
-print(novas_accoes)
-outrointeressante=jj.result(interessante,novas_accoes[0])
-jj.display(interessante) 
-print("................................")
-jj.display(outrointeressante)
-print("Jogadas possíveis: ", novas_accoes)
+jj.jogar(query_player,minimax_player)
