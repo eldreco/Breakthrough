@@ -8,11 +8,14 @@ def func_aval_flex(state, player):
     score = 0
     win_value = float('inf')
     attack_value = 10000000
-    column_values = {'a' : 0, 'b':400, 'c' : 200, 'd' : 300, 'e' : 300, 'f' : 200, 'g' : 400 ,'h' : 0}
+    column_values = {'a' : 0, 'b':300, 'c' : 200, 'd' : 400, 'e' : 400, 'f' : 200, 'g' : 300 ,'h' : 0}
     n_blacks = []
     n_whites = []
+    tower_value = 500
     n_tower_b = 0
     n_tower_g = 0
+    n_tower_d = 0
+    n_tower_e = 0
 
     player_piece = 'W' if player == 1 else 'B'
 
@@ -26,6 +29,28 @@ def func_aval_flex(state, player):
         else:
             if pos[1] == 1:
                 return win_value
+        
+        if player == 1:
+            next_pos = pos[0] + str(int(pos[1]) + 1)
+
+        else:
+            next_pos = pos[0] + str(int(pos[1]) - 1)
+
+        for pos2 in state.board.keys():
+            if pos2[0] == 'b' and pos2 == next_pos:
+                n_tower_b += 1
+            if pos2[0] == 'g' and pos2 == next_pos:
+                n_tower_g += 1
+            if pos2[0] == 'd' and pos2 == next_pos:
+                n_tower_d += 1
+            if pos2[0] == 'e' and pos2 == next_pos:
+                n_tower_e += 1
+
+        score += n_tower_b * tower_value
+        score += n_tower_g * tower_value
+        score += n_tower_d * tower_value
+        score += n_tower_e * tower_value
+        score += n_tower_b * tower_value + n_tower_g * tower_value + n_tower_d * tower_value + n_tower_e * tower_value
         
         if pos_piece == "W":
             n_whites.append(pos)
