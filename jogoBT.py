@@ -169,19 +169,46 @@ class JogoBT_27(Game):
             s = self.result(s, j)
         return s   
 
-Belarmino = jogadorBT_27("Belarmino",2, func_aval_Belarmino)
+#------------------------------------------------------------------------
+#                       Estatísticas
 
-minimax = Jogador("minima", minimax_player)
-Ronaldo = jogadorBT_27("Ronaldo", 2, func_aval_flex)
-Messi = jogadorBT_27("Messi", 2, func_aval_chorao)
+for profundidade in range(2,8):
+    #minimax = Jogador("minima", minimax_player)
+    print("PROFUNDIDADE ", profundidade)
+    Belarmino = jogadorBT_27("Belarmino",profundidade, func_aval_Belarmino)
+    Ronaldo = jogadorBT_27("Ronaldo", profundidade, func_aval_flex)
+    Messi = jogadorBT_27("Messi", profundidade, func_aval_chorao)
+    Mutu = jogadorBT_27("Mutu", profundidade, func_aval_mutu)
 
-jj = JogoBT_27()
+    jj = JogoBT_27()
+    listaJogadores = [Belarmino, Mutu, Ronaldo, Messi]
+    jogos = []
+    for x in listaJogadores:
+        for y in listaJogadores:
+            jogos.append((x,y))
 
-listaJogadores = [Belarmino, Belarmino, Belarmino, Belarmino, minimax, minimax, Ronaldo,Messi]
+    #listaJogadores = [Belarmino, Mutu, Ronaldo, Messi]
+    #jj.jogar(query_player, Mutu)
+    #faz_campeonato(jj, listaJogadores, 5)
+    white_rate = {Belarmino : 0, Ronaldo : 0, Messi : 0, Mutu : 0}
+    black_rate = {Belarmino : 0, Ronaldo : 0, Messi : 0, Mutu : 0}
 
-#faz_campeonato(jj, listaJogadores, 10)
+    for (jog1, jog2) in jogos:
+        score = 0
+        for i in range(1,11):
+            result = joga11com_timeout(jj, jog1, jog2, 5)
+            if (result[2] == 1):
+                score += 1
+        print(jog1.nome + " vs " + jog2.nome)
+        print(str(score) + " / " + str((10-score)))
+        white_rate[jog1] = white_rate[jog1] + score
+        black_rate[jog2] = black_rate[jog2] + 10 - score
 
-print(joga11(jj, Belarmino, Ronaldo))
-
-#jj.jogar(query_player, random_player)
-
+    #-----------------------------------------------------------------
+    #Winning-rate
+    print("----------------------------------------------------------")
+    print("BRANCAS")
+    for jog in white_rate:
+        print(jog.nome + ": " + str(white_rate[jog]) + " em 40")
+    for jog in black_rate:
+        print(jog.nome + ": " + str(black_rate[jog]) + " em 40")
