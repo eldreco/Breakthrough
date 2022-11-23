@@ -1,8 +1,8 @@
 from jogos import*
-from jogar import *
-from jogadorBT import *
 
-EstadoBT_27 = namedtuple('State', 'to_move, utility, board, moves')
+
+
+EstadoBT_27 = namedtuple('State', 'to_move, utility, board, moves, whites, blacks')
 
 class JogoBT_27(Game):
     #to_move = 1
@@ -13,15 +13,27 @@ class JogoBT_27(Game):
                 "a2" : 'W', "b2" : 'W', "c2" : 'W', "d2" : 'W', "e2" : 'W', "f2" : 'W', "g2" : 'W', "h2" : 'W',
                 "a7" : 'B', "b7" : 'B', "c7" : 'B', "d7" : 'B', "e7" : 'B', "f7" : 'B', "g7" : 'B', "h7" : 'B',
                 "a8" : 'B', "b8" : 'B', "c8" : 'B', "d8" : 'B', "e8" : 'B', "f8" : 'B', "g8" : 'B', "h8" : 'B'}
+    whites = dict()
+    blacks = dict()
+    for pos in board.keys():
+
+        if board.get(pos) == "W":
+            whites[pos] = 'W'
+        else:
+            blacks[pos] = 'B'
     moves = ['a2-a3', 'a2-b3', 'b2-a3', 'b2-b3', 'b2-c3', 'c2-b3', 'c2-c3', 'c2-d3',
                 'd2-c3', 'd2-d3', 'd2-e3', 'e2-d3', 'e2-e3', 'e2-f3', 'f2-e3', 'f2-f3',
                 'f2-g3', 'g2-f3', 'g2-g3', 'g2-h3', 'h2-g3','h2-h3']
-    initial = EstadoBT_27(1, 0, board, moves)
+    initial = EstadoBT_27(1, 0, board, moves, whites, blacks)
 
     def _init(self, size = 8):
         self.size = size
         self.initial = initial
-
+        for pos in initial.board.keys():
+            if initial.board.get(pos) == "W":
+                whites.add(pos)
+            else:
+                blacks.add(pos)
     def actions(self, state):
         player = "W" if self.to_move(state) == 1 else "B"
         actions = list()
@@ -102,8 +114,16 @@ class JogoBT_27(Game):
         pos_to = move[1]
         new_board = state.board.copy()
         new_board[pos_to] = new_board.get(pos_from)   
+        new_whites = state.whites.copy()
+        new_blacks = state.blacks.copy()
+        if new_board.get(pos_from) == 'W':
+            new_whites[pos_to] = new_whites.get(pos_from)
+            del new_whites[pos_from]
+        else:
+            new_blacks[pos_to] = new_blacks.get(pos_from)
+            del new_blacks[pos_from]
         del new_board[pos_from]
-        result = EstadoBT_27(next_to_move, state.utility, new_board, state.moves)
+        result = EstadoBT_27(next_to_move, state.utility, new_board, state.moves, new_whites, new_blacks)
         return result
     
     def utility(self, state, player):
@@ -169,46 +189,3 @@ class JogoBT_27(Game):
             s = self.result(s, j)
         return s   
 
-#------------------------------------------------------------------------
-#                       Estatísticas
-
-for profundidade in range(2,8):
-    #minimax = Jogador("minima", minimax_player)
-    print("PROFUNDIDADE ", profundidade)
-    Belarmino = jogadorBT_27("Belarmino",profundidade, func_aval_Belarmino)
-    Ronaldo = jogadorBT_27("Ronaldo", profundidade, func_aval_flex)
-    Messi = jogadorBT_27("Messi", profundidade, func_aval_chorao)
-    Mutu = jogadorBT_27("Mutu", profundidade, func_aval_mutu)
-
-    jj = JogoBT_27()
-    listaJogadores = [Belarmino, Mutu, Ronaldo, Messi]
-    jogos = []
-    for x in listaJogadores:
-        for y in listaJogadores:
-            jogos.append((x,y))
-
-    #listaJogadores = [Belarmino, Mutu, Ronaldo, Messi]
-    #jj.jogar(query_player, Mutu)
-    #faz_campeonato(jj, listaJogadores, 5)
-    white_rate = {Belarmino : 0, Ronaldo : 0, Messi : 0, Mutu : 0}
-    black_rate = {Belarmino : 0, Ronaldo : 0, Messi : 0, Mutu : 0}
-
-    for (jog1, jog2) in jogos:
-        score = 0
-        for i in range(1,11):
-            result = joga11com_timeout(jj, jog1, jog2, 5)
-            if (result[2] == 1):
-                score += 1
-        print(jog1.nome + " vs " + jog2.nome)
-        print(str(score) + " / " + str((10-score)))
-        white_rate[jog1] = white_rate[jog1] + score
-        black_rate[jog2] = black_rate[jog2] + 10 - score
-
-    #-----------------------------------------------------------------
-    #Winning-rate
-    print("----------------------------------------------------------")
-    print("BRANCAS")
-    for jog in white_rate:
-        print(jog.nome + ": " + str(white_rate[jog]) + " em 40")
-    for jog in black_rate:
-        print(jog.nome + ": " + str(black_rate[jog]) + " em 40")
