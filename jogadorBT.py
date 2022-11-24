@@ -11,7 +11,7 @@ def func_aval_flex(state, player):
     column_values = {'a' : 0, 'b':300, 'c' : 200, 'd' : 400, 'e' : 400, 'f' : 200, 'g' : 300 ,'h' : 0}
     n_blacks = []
     n_whites = []
-    tower_value = 500s
+    tower_value = 500
     n_tower_b = 0
     n_tower_g = 0
     n_tower_d = 0
