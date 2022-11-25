@@ -65,7 +65,7 @@ def joga11com_timeout(game,jog1, jog2, nsec):
             estado=game.result(estado,jogada)
             lista_jogadas.append(jogada)
             proxjog = jog2 if proxjog == jog1 else jog1
-        #game.display(estado)
+            game.display(estado)
         #p jogou e ganhou
     return ((jog1.nome,jog2.nome),lista_jogadas, game.utility(estado,1))
 
