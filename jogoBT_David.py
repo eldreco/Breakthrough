@@ -1,39 +1,21 @@
 from jogos import*
+from jogar import *
+from jogadorBT_David import *
 
-
-
-EstadoBT_27 = namedtuple('State', 'to_move, utility, board, moves, whites, blacks')
+EstadoBT_27 = namedtuple('State', 'to_move, utility, board')
 
 class JogoBT_27(Game):
-    #to_move = 1
-    #utility = 0 #????
-    #size = 8
 
     board = {"a1" : 'W', "b1" : 'W', "c1" : 'W', "d1" : 'W', "e1" : 'W', "f1" : 'W', "g1" : 'W', "h1" : 'W',
                 "a2" : 'W', "b2" : 'W', "c2" : 'W', "d2" : 'W', "e2" : 'W', "f2" : 'W', "g2" : 'W', "h2" : 'W',
                 "a7" : 'B', "b7" : 'B', "c7" : 'B', "d7" : 'B', "e7" : 'B', "f7" : 'B', "g7" : 'B', "h7" : 'B',
                 "a8" : 'B', "b8" : 'B', "c8" : 'B', "d8" : 'B', "e8" : 'B', "f8" : 'B', "g8" : 'B', "h8" : 'B'}
-    whites = dict()
-    blacks = dict()
-    for pos in board.keys():
-
-        if board.get(pos) == "W":
-            whites[pos] = 'W'
-        else:
-            blacks[pos] = 'B'
-    moves = ['a2-a3', 'a2-b3', 'b2-a3', 'b2-b3', 'b2-c3', 'c2-b3', 'c2-c3', 'c2-d3',
-                'd2-c3', 'd2-d3', 'd2-e3', 'e2-d3', 'e2-e3', 'e2-f3', 'f2-e3', 'f2-f3',
-                'f2-g3', 'g2-f3', 'g2-g3', 'g2-h3', 'h2-g3','h2-h3']
-    initial = EstadoBT_27(1, 0, board, moves, whites, blacks)
+    initial = EstadoBT_27(1, 0, board)
 
     def _init(self, size = 8):
         self.size = size
         self.initial = initial
-        for pos in initial.board.keys():
-            if initial.board.get(pos) == "W":
-                whites.add(pos)
-            else:
-                blacks.add(pos)
+
     def actions(self, state):
         player = "W" if self.to_move(state) == 1 else "B"
         actions = list()
@@ -114,16 +96,8 @@ class JogoBT_27(Game):
         pos_to = move[1]
         new_board = state.board.copy()
         new_board[pos_to] = new_board.get(pos_from)   
-        new_whites = state.whites.copy()
-        new_blacks = state.blacks.copy()
-        if new_board.get(pos_from) == 'W':
-            new_whites[pos_to] = new_whites.get(pos_from)
-            del new_whites[pos_from]
-        else:
-            new_blacks[pos_to] = new_blacks.get(pos_from)
-            del new_blacks[pos_from]
         del new_board[pos_from]
-        result = EstadoBT_27(next_to_move, state.utility, new_board, state.moves, new_whites, new_blacks)
+        result = EstadoBT_27(next_to_move, state.utility, new_board)
         return result
     
     def utility(self, state, player):
@@ -189,3 +163,27 @@ class JogoBT_27(Game):
             s = self.result(s, j)
         return s   
 
+#------------------------------------------------------------------------
+#                       Estatísticas
+Belarmino = jogadorBT_27("Belarmino",4, func_aval_Belarmino)
+Ronaldo = jogadorBT_27("Ronaldo",4, func_aval_flex)
+Messi = jogadorBT_27("Messi",4, func_aval_chorao)
+Mutu = jogadorBT_27("Mutu",4, func_aval_mutu)
+Passivo = jogadorBT_27("Passivo", 4, func_aval_passivo)
+Copiado = jogadorBT_27("Copiado", 4, func_aval_copiado)
+
+jj = JogoBT_27()
+
+def testes():
+    ganhou = 0
+    for i in range(1, 11):
+        result = joga11com_timeout(jj, Copiado, Belarmino, 20)
+
+        if result[-1] == 1:
+            ganhou+=1
+
+        print('Jogo ', i , ' completado! ------ ',ganhou, ' vitórias!' )
+
+
+faz_campeonato(jj, [Belarmino, Ronaldo, Mutu, Copiado], 20)
+#testes()
