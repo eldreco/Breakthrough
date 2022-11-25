@@ -15,7 +15,7 @@ def func_aval_Belarmino(state,player):
     return result
 
 def func_aval_27(state,player):
-    if player == 2:
+    if player == 1:
         return atacante(state, player)
     else:
         return defesa(state, player)
