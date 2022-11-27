@@ -1,10 +1,17 @@
+# Projeto desenvovido pelo grupo 27
+#
+# André Dias - 55314
+#
+# David Pereira - 56361
+#
+# Miguel Cut - 56339
+#
+
 from jogos import*
-from jogadorBT_Miguel import*
-from jogar import*
 
-EstadoBT_Miguel = namedtuple('State', 'to_move, utility, board, moves, whites, blacks, col_whites, col_blacks, line_whites, line_blacks')
+EstadoBT_27 = namedtuple('State', 'to_move, utility, board, whites, blacks, col_whites, col_blacks, line_whites, line_blacks')
 
-class JogoBT_Miguel(Game):
+class JogoBT_27(Game):
 
     board = {"a1" : 'W', "b1" : 'W', "c1" : 'W', "d1" : 'W', "e1" : 'W', "f1" : 'W', "g1" : 'W', "h1" : 'W',
                 "a2" : 'W', "b2" : 'W', "c2" : 'W', "d2" : 'W', "e2" : 'W', "f2" : 'W', "g2" : 'W', "h2" : 'W',
@@ -25,10 +32,8 @@ class JogoBT_Miguel(Game):
             blacks[pos] = 'B'
             col_blacks[pos[0]] = col_blacks[pos[0]] + 1
             line_blacks[pos[1]] = line_blacks[pos[1]] + 1
-    moves = ['a2-a3', 'a2-b3', 'b2-a3', 'b2-b3', 'b2-c3', 'c2-b3', 'c2-c3', 'c2-d3',
-                'd2-c3', 'd2-d3', 'd2-e3', 'e2-d3', 'e2-e3', 'e2-f3', 'f2-e3', 'f2-f3',
-                'f2-g3', 'g2-f3', 'g2-g3', 'g2-h3', 'h2-g3','h2-h3']
-    initial = EstadoBT_Miguel(1, 0, board, moves, whites, blacks, col_whites, col_blacks, line_whites, line_blacks)
+
+    initial = EstadoBT_27(1, 0, board, whites, blacks, col_whites, col_blacks, line_whites, line_blacks)
 
     def _init(self, size = 8):
         self.size = size
@@ -139,7 +144,7 @@ class JogoBT_Miguel(Game):
             new_line_blacks[move[1]] = new_line_blacks[move[1]] - 1
             new_line_blacks[move[4]] = new_line_blacks[move[4]] + 1
         del new_board[pos_from]
-        result = EstadoBT_Miguel(next_to_move, state.utility, new_board, state.moves, new_whites, new_blacks, new_col_whites, new_col_blacks, new_line_whites, new_line_blacks)
+        result = EstadoBT_27(next_to_move, state.utility, new_board, new_whites, new_blacks, new_col_whites, new_col_blacks, new_line_whites, new_line_blacks)
         return result
     
     def utility(self, state, player):
@@ -194,3 +199,224 @@ class JogoBT_Miguel(Game):
         for j in listaJogadas:
             s = self.result(s, j)
         return s
+
+
+def func_aval_Misto_27(state, player):
+
+    #funcs
+
+    def eval_column(state, player):
+        
+        #Value the amount of pieces in collumns b, d, e and g in order for 
+        #the player to prioritize placing pieces in those collumns
+
+        result = 0
+        player = 'W' if player == 1 else 'B'
+
+        for pos in state.board.keys():
+
+            piece = state.board.get(pos)
+
+            if piece == player:
+
+                if pos[0] == 'b' or pos[0] == 'g':
+                    result += 2 
+                elif pos[0] == 'd' or pos[0] == 'e':
+                    result += 1
+
+        return result
+
+    def eval_attack(state, player):
+
+        #Value a bigger difference between pieces of the player and the adversary, such that the
+        #player will capture a piece when possible
+
+        player = 'W' if player == 1 else 'B'
+        n_white = 0
+        n_blacks = 0
+        dif = 0
+
+        for pos in state.board.keys():
+
+            piece = state.board.get(pos)
+
+            if piece == 'W':
+                n_white+=1
+            else:
+                n_blacks+=1
+
+            
+            if player == 'W':
+
+                dif = n_white - n_blacks
+
+            else:
+                dif = n_blacks - n_white
+
+        return dif
+
+    def eval_defense(state, player):
+
+        #Devalue states where the adversary has many pieces
+        #on the player's side
+
+        player_to_avoid = 'B' if player == 1 else 'W'
+        score = 0
+
+        for pos in state.board.keys():
+
+            piece = state.board.get(pos)
+
+            if piece == player_to_avoid and int(pos[1]) < 5 and player_to_avoid == 'B':
+                score-=2
+
+            elif piece == player_to_avoid and int(pos[1]) > 5 and player_to_avoid == 'W':
+                score-=2
+
+        return score
+
+    def eval_advance(state,player):
+        result = 0
+        if player == 1:
+            for x in range(1,9):
+                result += pow(x,x) * state.line_whites.get(str(x))
+        else:
+            for x in range(8, 0, -1):
+                result += pow(9-x,9-x) * state.line_blacks.get(str(x))
+        return result/1000
+
+    #funcs
+
+    evaluators = [eval_column, eval_attack, eval_defense, eval_advance]
+    score = 0
+
+    for evaluator in evaluators:
+
+        score += evaluator(state, player)
+    
+    return score
+
+def func_aval_Belarmino_27(state,player):
+    
+    def count_pieces(state, line, player):
+        count = 0
+        if player == 1:
+            for pos in state.board.keys():
+                if str(line) in pos and state.board.get(pos) == "W":
+                    count += 1
+        else:
+            for pos in state.board.keys():
+                if str(line) in pos and state.board.get(pos) == "B":
+                    count += 1
+        return count
+    
+    result = 0
+
+    if player == 1:
+
+        for x in range(1,9):
+            result += pow(x,x) * count_pieces(state, x, player)
+    else:
+        for x in range(8, 0, -1):
+            result += pow(9-x,9-x) * count_pieces(state, x, player)
+    
+    return result
+
+def func_aval_escolha_27(state,player):
+    
+    def atacante(state, player):
+        score = 0
+        win_value = float('inf')
+        attack_value = 10000000000
+        column_values = {'a' : 0, 'b' : 400, 'c' : 300, 'd' : 400, 'e' : 400, 'f' : 300, 'g' : 400 ,'h' : 0}
+        w_line_values = {'1' : 1, '2' : 2, '3' : 3, '4' : 4, '5' : 5, '6' : 6, '7' : 7, '8' : 8}
+
+        if state.line_whites[str(8)] >= 1:
+            return win_value
+        elif state.line_blacks[str(1)] >= 1:
+            return -1000
+
+        dif = len(state.whites.keys()) - len(state.blacks.keys())
+        score += dif*attack_value
+
+        for pos in reversed(state.whites.keys()): 
+            score += column_values.get(pos[0]) * w_line_values.get(pos[1])
+
+        score+=func_aval_Belarmino_27(state, player)/10000000
+
+        return score
+
+    def defesa(state, player):
+        win_value = float('inf')
+        attack_value = 10000000000
+        score = 0
+        column_values = {'a' : 0, 'b': 400, 'c' : 200, 'd' : 400, 'e' : 400, 'f' : 200, 'g' : 400,'h' : 0}
+        b_line_values = {'2' : 100, '3' : 90, '4' : 50, '5' : 50, '6' : 60, '7' : 70, '8' : 80}
+
+        if state.line_blacks[str(1)] >= 1:
+            return win_value
+        elif state.line_whites[str(8)] >= 1:
+            return -1000000
+
+        dif = len(state.blacks.keys()) - len(state.whites.keys())
+        score += dif*attack_value
+
+        for pos in state.blacks.keys(): 
+            score += column_values.get(pos[0]) * b_line_values.get(pos[1])
+
+        return score
+    
+    if player == 1:
+        return atacante(state, player)
+    else:
+        return defesa(state, player)
+
+
+def func_aval_agressivo_27(state, player):
+    score = 0
+    win_value = float('inf')
+    attack_value = 10000
+    column_values = {'a' : 0, 'b' : 400, 'c' : 400, 'd' : 200, 'e' : 200, 'f' : 400, 'g' : 400 ,'h' : 0}
+    w_line_values = {'1' : 1, '2' : 2, '3' : 3, '4' : 4, '5' : 5, '6' : 6, '7' : 7, '8' : 8}
+    b_line_values = {'1' : 8, '2' : 7, '3' : 6, '4' : 5, '5' : 4, '6' : 3, '7' : 2, '8' : 1}
+    n_blacks = []
+    n_whites = []
+    n_tower_b = 0
+    n_tower_g = 0
+
+    player_piece = 'W' if player == 1 else 'B'
+
+    keys_list = reversed(state.board.keys())
+
+    for pos in keys_list: 
+
+        if player == 1:
+            if pos[1] == 8:
+                return win_value
+        else:
+            if pos[1] == 1:
+                return win_value
+
+        pos_piece = state.board.get(pos)
+        
+        if pos_piece == player_piece:
+            if player_piece == 1:
+                score += column_values.get(pos[0]) * w_line_values.get(pos[0])
+            else:
+                score += column_values.get(pos[0]) * b_line_values.get(pos[1])
+
+        if pos_piece == "W":
+            n_whites.append(pos)
+        else:
+            n_blacks.append(pos)
+    
+    if player == 1:
+        dif = len(n_whites) - len(n_blacks)
+        score += dif*attack_value
+    else:
+        dif = len(n_blacks) - len(n_whites)
+        score += dif*attack_value
+
+    score+=func_aval_Belarmino_27(state, player)/100
+
+    return score

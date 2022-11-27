@@ -45,7 +45,7 @@ def func_aval_flex(state, player):
         dif = len(n_blacks) - len(n_whites)
         score+= dif*attack_value
 
-    score+=func_aval_Belarmino(state, player)/1000
+    score+=func_aval_Belarmino_David(state, player)/1000
 
     return score
 
@@ -180,14 +180,21 @@ def func_aval_copiado(state, player):
 
         return score
 
-    def eval_advance(state, player):
-        return func_aval_Belarmino(state, player) / 100
+    def eval_advance(state,player):
+        result = 0
+        if player == 1:
+            for x in range(1,9):
+                result += pow(x,x) * state.line_whites.get(str(x))
+        else:
+            for x in range(8, 0, -1):
+                result += pow(9-x,9-x) * state.line_blacks.get(str(x))
+        return result/1000
 
     #funcs
 
 
 
-    evaluators = [eval_column, eval_attack, eval_defense]
+    evaluators = [eval_column, eval_attack, eval_defense, eval_advance]
     score = 0
 
     for evaluator in evaluators:
@@ -295,7 +302,7 @@ def func_aval_chorao(state, player):
         dif = len(n_blacks) - len(n_whites)
         return dif*attack_value
 
-    score+=func_aval_Belarmino(state, player)/1000
+    score+=func_aval_Belarmino_David(state, player)/1000
 
     return score
     
@@ -311,7 +318,7 @@ def count_pieces(state, line, player):
                 count += 1
     return count
 
-def func_aval_Belarmino(state,player):
+def func_aval_Belarmino_David(state,player):
     result = 0
 
     if player == 1:
@@ -369,7 +376,7 @@ def func_aval_mutu(state, player):
         dif = len(n_blacks) - len(n_whites)
         score += dif*attack_value
 
-    score+=func_aval_Belarmino(state, player)/100
+    score+=func_aval_Belarmino_David(state, player)/100
 
     return score
         

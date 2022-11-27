@@ -1,4 +1,4 @@
-##Versão 14 Nov 2022 11:19
+##Versão 16 Nov 2022 11:56
 
         
 from random import *
@@ -11,7 +11,7 @@ class Jogador():
         self.nome = nome
         self.fun = fun
     def display(self):
-        print(nome+" ")
+        print(self.nome+" ")
 
 
 # Classe JogadorAlfaBeta 
@@ -34,12 +34,12 @@ def joga11(game, jog1, jog2):
     proxjog = jog1
     lista_jogadas=[]
     while not game.terminal_test(estado):
+ #       estado.display()
         jogada = proxjog.fun(game, estado)
 #        p = game.to_move(estado)
         estado=game.result(estado,jogada)
         lista_jogadas.append(jogada)
         proxjog = jog2 if proxjog == jog1 else jog1
-        game.display(estado)
     #p jogou e ganhou
     return ((jog1.nome,jog2.nome),lista_jogadas, game.utility(estado,1))
 
@@ -65,7 +65,6 @@ def joga11com_timeout(game,jog1, jog2, nsec):
             estado=game.result(estado,jogada)
             lista_jogadas.append(jogada)
             proxjog = jog2 if proxjog == jog1 else jog1
-            #game.display(estado)
         #p jogou e ganhou
     return ((jog1.nome,jog2.nome),lista_jogadas, game.utility(estado,1))
 
@@ -77,8 +76,10 @@ def jogaNN(game, listaJog, listaAdv, nsec=1):
         for adv in listaAdv:
             if jog != adv:
                 j +=1
-                lista_jogos.append(joga11com_timeout(game, jog,adv, nsec))
-                print(j,jog.nome, adv.nome)
+                res = joga11com_timeout(game, jog, adv, nsec)
+                lista_jogos.append(res)
+                ((a,b),_,d) = res
+                print(j,jog.nome, adv.nome, "--vencedor=", a if d==1 else b)
     return lista_jogos
 
 
@@ -126,13 +127,10 @@ def uiui_joga11com_timeout(gameJog1, jog1, gameJog2, jog2, gCore,nsec=10):
     ### jog1 e jog2 são jogadores com funções que dado um estado do jogo devolvem a jogada que escolheram
     ### devolve uma lista de jogadas e o resultado 1 se S ganha
     estadoCore=gCore.initial
-    #gCore.display(estadoCore)
     gJog1=gameJog1()
     estadoJog1=gJog1.initial
-    #gJog1.display(estadoJog1)
     gJog2=gameJog2()
     estadoJog2=gJog2.initial
-    #gJog2.display(estadoJog2)
     proxjog = jog1
     lista_jogadas=[]
     while not gCore.terminal_test(estadoCore):
@@ -149,7 +147,6 @@ def uiui_joga11com_timeout(gameJog1, jog1, gameJog2, jog2, gCore,nsec=10):
         estadoJog1=gJog1.result(estadoJog1,jogada)
         estadoJog2=gJog2.result(estadoJog2,jogada)
         estadoCore=gCore.result(estadoCore,jogada)
-        #gCore.display(estadoCore)
         lista_jogadas.append(jogada)
         proxjog = jog2 if proxjog == jog1 else jog1
     return ((jog1.nome,jog2.nome),lista_jogadas, gCore.utility(estadoCore, 1))

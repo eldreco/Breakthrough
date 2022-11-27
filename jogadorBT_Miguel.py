@@ -62,7 +62,7 @@ def defesa(state, player):
 
     return score
 
-def func_aval_flex(state, player):
+def func_aval_flex2(state, player):
     score = 0
     win_value = float('inf')
     attack_value = 10000000
@@ -128,5 +128,4 @@ def func_aval_flex(state, player):
     score+=func_aval_Belarmino(state, player)/1000
 
     return score
-
 
