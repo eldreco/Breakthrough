@@ -118,9 +118,9 @@ class JogoBT_27(Game):
     
     def result(self, state, move):
         next_to_move = 2 if state.to_move == 1 else 1
-        andre = move.split("-")
-        pos_from = andre[0]
-        pos_to = andre[1]
+        split = move.split("-")
+        pos_from = split[0]
+        pos_to = split[1]
         new_board = state.board.copy()
         new_board[pos_to] = new_board.get(pos_from)  
         new_whites = state.whites.copy()
