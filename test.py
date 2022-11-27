@@ -1,25 +1,40 @@
-from jogadorBT_David import *
-from jogadorBT_Miguel import *
-from jogoBT_David import *
-from jogoBT_Miguel import *
+from jogoBT_Andre import*
+from jogadorBT_Andre import*
 
 jogo1 = JogoBT_27()
 jogo2 = JogoBT_Miguel()
 
-jogadorDavid = JogadorAlfaBeta('David', 4, func_aval_copiado)
-#jogadorMiguel = JogadorAlfaBeta('Miguel', 1, func_aval_27)
-#jogadorBelarmino = JogadorAlfaBeta('Belarmino', 1, func_aval_Belarmino)
-#jogadorRandom = Jogador('Random', random_player)
-#jogadorRonaldo = JogadorAlfaBeta('Ronaldo', 4, func_aval_flex)
-#jogadorMutu2 = JogadorAlfaBeta('Mutu2', 4, func_aval_mutu)
-jogadorBelarminoBurro = JogadorAlfaBeta('BelarminoBurro', 4 , func_aval_Belarmino_David)
+Belarmino1 = jogadorBT_27("Belarmino1",2, func_aval_Belarmino)
+Belarmino2 = jogadorBT_27("Belarmino2",4, func_aval_Belarmino)
+Ronaldo = jogadorBT_27("Ronaldo", 3, func_aval_flex)
+Messi = jogadorBT_27("Messi", 2, func_aval_chorao)
+Mutu = jogadorBT_27("Mutu", 3, func_aval_mutu)
+
+
+Copiado = jogadorBT_27("Copiado", 3, func_aval_copiado)
+#Copiado2 = jogadorBT_27("Copiado2", 4, func_aval_copiado2)
+
 
 score = 0
 print('Depth 1, white, jog1')
 for i in range(0, 100):
 
-    result = uiui_joga11com_timeout(JogoBT_Miguel, jogadorBelarminoBurro, JogoBT_Miguel, jogadorDavid, jogo1, 10)
-    if result[-1] == -1:
-        score+=1
+jj = JogoBT_27()
 
-    print('Jogo: ', i , ' Vitórias: ', score)
+
+
+
+joga11com_timeout(jj, Ronaldo, Belarmino1, 10)
+
+def testes():
+    print("testes")
+    counter = 0
+
+    for i in range(1,51):
+        result = joga11com_timeout(jj, Mutu, Ronaldo, 10)
+        if result[-1] == -1:
+            counter+= 1
+        print("game", i, "result",counter)
+
+
+#testes()
